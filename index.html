@@ -1,5 +1,5 @@
 <!doctype html>
-<!-- LifeLog v7 collapsible completed goals -->
+<!-- LifeLog v8 separate completed-goals page + delete -->
 <html lang="ja">
 <head>
 <meta charset="utf-8">
@@ -7,12 +7,24 @@
 <title>LifeLog</title>
 <style>
 *{box-sizing:border-box}body{margin:0;background:#fff;color:#0d1321;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","Noto Sans JP",sans-serif}.app{max-width:760px;margin:auto;padding:22px 16px 70px}.head{display:flex;align-items:center;justify-content:space-between;margin-bottom:18px}.head h1{font-size:34px;margin:0;letter-spacing:-1px}.head p{margin:4px 0 0;color:#9aa0ad}.round{border:0;background:#f3f4f6;border-radius:50%;width:48px;height:48px;font-size:26px}.goalBox{background:#f4faf7;border:1px solid #e2f0e8;border-radius:22px;padding:16px 18px;margin-bottom:34px}.goalTitle{font-weight:800;color:#128456;font-size:18px;margin-bottom:8px}.goal{padding:13px 0;border-bottom:1px solid #dfe9e3;font-size:17px;display:flex;gap:10px;align-items:center}.goal:last-child{border-bottom:0}.check{width:24px;height:24px;border:2px solid #a7ada9;border-radius:7px;background:#fff}.calHead{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px}.month{font-size:42px;font-weight:900;letter-spacing:-2px}.calBtns{display:flex;gap:10px}.calBtn{border:0;background:#f3f4f6;border-radius:50%;width:48px;height:48px;font-size:22px}.week,.grid{display:grid;grid-template-columns:repeat(7,1fr)}.week div{text-align:center;font-weight:700;padding:12px 0;border-bottom:1px solid #e7e8eb}.week div:first-child{color:#e53935}.week div:last-child{color:#1565d8}.grid{border-left:1px solid #e7e8eb;border-top:1px solid #e7e8eb;border-radius:18px;overflow:hidden}.day{min-height:96px;border:0;border-right:1px solid #e7e8eb;border-bottom:1px solid #e7e8eb;background:#fff;font-size:19px;font-weight:700;position:relative}.day.sun{color:#e53935}.day.sat{color:#1565d8}.day.muted{color:#c6c8cd}.todayNum{width:48px;height:48px;border-radius:50%;display:inline-flex;align-items:center;justify-content:center;background:#ff3948;color:white}.dot{width:6px;height:6px;border-radius:50%;background:#dca4ee;position:absolute;bottom:12px;left:50%;transform:translateX(-50%)}.modal{position:fixed;inset:0;background:rgba(0,0,0,.35);display:none;align-items:flex-end;justify-content:center;padding-top:30px}.modal.show{display:flex}.sheet{background:white;width:min(760px,100%);max-height:90vh;overflow:auto;border-radius:24px 24px 0 0;padding:20px 18px calc(24px + env(safe-area-inset-bottom))}.sheet h2{margin:0 0 8px}.sub{color:#7a808d;font-size:13px;margin-bottom:18px}.field{margin-bottom:14px}.field label{display:block;color:#6f7580;font-size:13px;margin-bottom:6px}.field input,.field textarea,.field select{width:100%;padding:13px;border:1px solid #dedfe4;border-radius:13px;font-size:16px}.field textarea{min-height:120px}.two{display:grid;grid-template-columns:1fr 1fr;gap:10px}.btn{width:100%;border:0;border-radius:14px;padding:14px;font-weight:800;font-size:16px;margin-top:8px}.primary{background:#111827;color:#fff}.light{background:#f3f4f6}.choice{display:grid;grid-template-columns:1fr 1fr;gap:10px}.choice button{border:1px solid #e0e1e4;background:#fff;border-radius:16px;padding:22px 8px;font-weight:800;font-size:17px}.expenseRow{display:grid;grid-template-columns:1fr 1.4fr auto;gap:8px;align-items:center}.expenseList{margin-top:10px}.expenseItem{display:grid;grid-template-columns:1fr auto auto;gap:8px;align-items:center;padding:10px 0;border-bottom:1px solid #eee}.expenseItem button{border:0;background:#f3f4f6;border-radius:9px;padding:7px 10px}.goal input{flex:1;border:0;background:transparent;font-size:17px;outline:none}.check{cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:16px;font-weight:900;color:#128456;padding:0}.completedToggle{border:0;background:#eef5f1;color:#128456;border-radius:12px;padding:10px 12px;width:100%;margin-top:12px;font-weight:800}.completedBox{display:none;margin-top:10px;padding-top:10px;border-top:1px solid #dfe9e3}.completedBox.show{display:block}.completedItem{display:flex;justify-content:space-between;gap:12px;padding:8px 0;font-size:14px;color:#5f6672}.moneySummary{margin-top:18px;display:grid;grid-template-columns:1fr;gap:12px}.summaryCard{border:1px solid #e7e8eb;border-radius:18px;padding:16px;background:#fff}.summaryLabel{font-size:13px;color:#737986;margin-bottom:6px}.summaryValue{font-size:28px;font-weight:900}.salaryRow{display:flex;gap:8px;align-items:center}.salaryRow input{flex:1;padding:13px;border:1px solid #dedfe4;border-radius:13px;font-size:16px}.salaryRow button{border:0;border-radius:12px;padding:13px 16px;font-weight:800;background:#111827;color:#fff}.goalAdd{border:1px dashed #b9cec2;background:#fff;border-radius:12px;padding:10px;width:100%;margin-top:10px;font-weight:700;color:#128456}.mini{font-size:13px;color:#737986;margin-top:8px}@media(max-width:520px){.app{padding:18px 12px 50px}.head h1{font-size:30px}.month{font-size:38px}.day{min-height:78px;font-size:18px}}
+
+.completedPage{position:fixed;inset:0;background:#fff;z-index:50;display:none;overflow:auto}
+.completedPage.show{display:block}
+.completedPageInner{max-width:760px;margin:auto;padding:18px 16px 60px}
+.completedHeader{display:flex;align-items:center;gap:12px;margin-bottom:22px}
+.completedBack{border:0;background:#f3f4f6;border-radius:50%;width:44px;height:44px;font-size:24px}
+.completedHeader h2{margin:0;font-size:28px}
+.completedPageItem{display:grid;grid-template-columns:1fr auto;gap:12px;align-items:center;padding:16px 0;border-bottom:1px solid #e7e8eb}
+.completedGoalText{font-size:17px;font-weight:700}
+.completedGoalDate{font-size:13px;color:#737986;margin-top:4px}
+.completedDelete{border:0;background:#f3f4f6;border-radius:10px;padding:9px 12px;font-weight:700;color:#c33}
+
 </style>
 </head>
 <body>
 <div class="app">
  <div class="head"><div><h1>LifeLog</h1><p>&#20170;&#26085;&#12418;&#19968;&#27497;&#12289;&#12424;&#12367;&#12420;&#12387;&#12383;&#12290;</p></div></div>
- <section class="goalBox"><div class="goalTitle">&#9873; &#20170;&#12398;&#30446;&#27161;</div><div id="goals"></div><button class="goalAdd" onclick="addGoal()">&#65291; &#30446;&#27161;&#12434;&#36861;&#21152;</button><button class="completedToggle" id="completedToggle" onclick="toggleCompletedGoals()">&#36948;&#25104;&#12375;&#12383;&#30446;&#27161;&#12434;&#35211;&#12427;</button><div class="completedBox" id="completedBox"><div id="completedGoals"></div></div></section>
+ <section class="goalBox"><div class="goalTitle">&#9873; &#20170;&#12398;&#30446;&#27161;</div><div id="goals"></div><button class="goalAdd" onclick="addGoal()">&#65291; &#30446;&#27161;&#12434;&#36861;&#21152;</button><button class="completedToggle" onclick="openCompletedPage()">&#36948;&#25104;&#12375;&#12383;&#30446;&#27161;&#12434;&#35211;&#12427;</button></section>
  <div class="calHead"><div class="month" id="monthTitle">9&#26376;</div><div class="calBtns"><button class="calBtn" onclick="move(-1)">&#8249;</button><button class="calBtn" onclick="goToday()">&#9679;</button><button class="calBtn" onclick="move(1)">&#8250;</button></div></div>
  <div class="week"><div>&#26085;</div><div>&#26376;</div><div>&#28779;</div><div>&#27700;</div><div>&#26408;</div><div>&#37329;</div><div>&#22303;</div></div>
  <div class="grid" id="calendar">
@@ -37,6 +49,17 @@
    </div>
  </div>
 </div>
+
+<div class="completedPage" id="completedPage">
+  <div class="completedPageInner">
+    <div class="completedHeader">
+      <button class="completedBack" onclick="closeCompletedPage()">&#8249;</button>
+      <h2>&#36948;&#25104;&#12375;&#12383;&#30446;&#27161;</h2>
+    </div>
+    <div id="completedGoalsPage"></div>
+  </div>
+</div>
+
 <div class="modal" id="choice" onclick="backdrop(event,'choice')"><div class="sheet"><h2 id="choiceDate">&#26085;&#20184;</h2><div class="sub">&#12371;&#12398;&#26085;&#12399;&#12393;&#12358;&#12377;&#12427;&#65311;</div><div class="choice"><button onclick="openEdit()">&#32232;&#38598;</button><button onclick="openPlan()">&#20104;&#23450;&#35352;&#20837;</button></div><button class="btn light" onclick="closeM('choice')">&#38281;&#12376;&#12427;</button></div></div>
 <div class="modal" id="edit" onclick="backdrop(event,'edit')"><div class="sheet"><h2 id="editDate">&#20170;&#26085;&#12398;&#35352;&#37682;</h2><div class="two"><div class="field"><label>&#21220;&#21209;</label><select id="shift"><option value="">&#36984;&#25246;</option><option>&#26172;&#21220;</option><option>&#22812;&#21220;</option><option>&#20241;&#12415;</option></select></div><div class="field"><label>&#36864;&#31038;&#26178;&#38291;</label><input type="time" id="clock"></div></div><div class="field"><label>&#26085;&#35352; / &#20170;&#26085;&#12354;&#12387;&#12383;&#12371;&#12392;</label><textarea id="diary" placeholder="&#20170;&#26085;&#12354;&#12387;&#12383;&#12371;&#12392;&#12434;&#33258;&#30001;&#12395;&#26360;&#12367;"></textarea></div><div class="field"><label>&#20351;&#12387;&#12383;&#12362;&#37329;</label><div class="expenseRow"><input id="amount" type="number" inputmode="numeric" placeholder="&#37329;&#38989;"><input id="expenseNote" placeholder="&#20309;&#12395;&#20351;&#12387;&#12383;&#65311;"><button class="btn light" style="margin:0;padding:12px" onclick="addExpense()">&#36861;&#21152;</button></div><div class="expenseList" id="expenseList"></div></div><div class="mini" id="spentTotal">&#12371;&#12398;&#26085;&#12398;&#25903;&#20986; &#165;0</div><button class="btn primary" onclick="saveEdit()">&#20445;&#23384;</button><button class="btn light" onclick="closeM('edit')">&#38281;&#12376;&#12427;</button></div></div>
 <div class="modal" id="plan" onclick="backdrop(event,'plan')"><div class="sheet"><h2 id="planDate">&#20104;&#23450;&#35352;&#20837;</h2><div class="field"><label>&#20309;&#26178;&#65311;</label><input type="time" id="planTime"></div><div class="field"><label>&#20104;&#23450;</label><input id="planText" placeholder="&#20363;&#65306;&#27503;&#21307;&#32773;&#12289;&#21451;&#36948;&#12392;&#12372;&#39151;"></div><button class="btn primary" onclick="savePlan()">&#20104;&#23450;&#12434;&#20445;&#23384;</button><button class="btn light" onclick="closeM('plan')">&#38281;&#12376;&#12427;</button></div></div>
@@ -72,8 +95,27 @@ function renderGoals(){document.getElementById('goals').innerHTML=goals.map((g,i
 function changeGoal(i,v){goals[i]=v;store()}
 function addGoal(){goals.push('\u65b0\u3057\u3044\u76ee\u6a19');store();renderGoals()}
 function completeGoal(i){let text=goals[i];completedGoals.unshift({text:text,date:TODAY});goals.splice(i,1);store();renderGoals()}
-function toggleCompletedGoals(){let box=document.getElementById('completedBox'),btn=document.getElementById('completedToggle');let open=box.classList.toggle('show');btn.textContent=open?'\u9054\u6210\u3057\u305f\u76ee\u6a19\u3092\u9589\u3058\u308b':'\u9054\u6210\u3057\u305f\u76ee\u6a19\u3092\u898b\u308b'}
-function renderCompletedGoals(){let el=document.getElementById('completedGoals');if(!completedGoals.length){el.innerHTML='<div class="mini">\u307e\u3060\u9054\u6210\u3057\u305f\u76ee\u6a19\u306f\u3042\u308a\u307e\u305b\u3093</div>';return}el.innerHTML=completedGoals.map(g=>'<div class="completedItem"><span>'+g.text+'</span><span>'+fmt(g.date)+'</span></div>').join('')}
+
+function openCompletedPage(){renderCompletedGoalsPage();document.getElementById('completedPage').classList.add('show');document.body.style.overflow='hidden'}
+function closeCompletedPage(){document.getElementById('completedPage').classList.remove('show');document.body.style.overflow=''}
+function renderCompletedGoals(){/* separate page mode */}
+function renderCompletedGoalsPage(){
+  let el=document.getElementById('completedGoalsPage');
+  if(!completedGoals.length){
+    el.innerHTML='<div class="mini">\u307e\u3060\u9054\u6210\u3057\u305f\u76ee\u6a19\u306f\u3042\u308a\u307e\u305b\u3093</div>';
+    return;
+  }
+  el.innerHTML=completedGoals.map((g,i)=>
+    '<div class="completedPageItem"><div><div class="completedGoalText">'+g.text+
+    '</div><div class="completedGoalDate">'+fmt(g.date)+' \u9054\u6210</div></div>'+
+    '<button class="completedDelete" onclick="deleteCompletedGoal('+i+')">\u524a\u9664</button></div>'
+  ).join('');
+}
+function deleteCompletedGoal(i){
+  completedGoals.splice(i,1);
+  store();
+  renderCompletedGoalsPage();
+}
 function editGoals(){addGoal()}
 renderGoals();render();
 </script>
