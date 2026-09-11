@@ -1,5 +1,5 @@
 <!doctype html>
-<!-- LifeLog v8 separate completed-goals page + delete -->
+<!-- LifeLog v10 early-shift option -->
 <html lang="ja">
 <head>
 <meta charset="utf-8">
@@ -19,12 +19,37 @@
 .completedGoalDate{font-size:13px;color:#737986;margin-top:4px}
 .completedDelete{border:0;background:#f3f4f6;border-radius:10px;padding:9px 12px;font-weight:700;color:#c33}
 
+
+.dailyBox{background:#f7f9ff;border:1px solid #e5e9f8;border-radius:22px;padding:16px 18px;margin:-18px 0 34px}
+.dailyTitle{font-weight:800;color:#3657b7;font-size:18px;margin-bottom:8px}
+.dailyGoal{padding:12px 0;border-bottom:1px solid #e4e7f2;display:grid;grid-template-columns:auto 1fr auto;gap:10px;align-items:center}
+.dailyGoal:last-child{border-bottom:0}
+.dailyCheck{width:26px;height:26px;border:2px solid #9aa6c7;border-radius:7px;background:#fff;font-size:18px;font-weight:900;color:#2b8a55;display:flex;align-items:center;justify-content:center;padding:0}
+.dailyGoal input{border:0;background:transparent;font-size:17px;outline:none;width:100%}
+.dailyDelete{border:0;background:transparent;color:#a7adba;font-size:20px}
+.dailyAdd{border:1px dashed #bac5e7;background:#fff;border-radius:12px;padding:10px;width:100%;margin-top:10px;font-weight:700;color:#3657b7}
+.dailyLegend{font-size:12px;color:#7c8390;margin-top:10px}
+.dailyHistoryCheck{display:flex;align-items:center;gap:8px;padding:8px 0}
+.dailyHistoryCheck input{width:22px;height:22px}
+.dailyStatus{position:absolute;left:50%;bottom:8px;transform:translateX(-50%);font-size:13px;font-weight:900;line-height:1}
+.dailyStatus.ok{color:#1a9b5f}
+.dailyStatus.ng{color:#e05252}
+.day .dot{bottom:26px}
+
 </style>
 </head>
 <body>
 <div class="app">
  <div class="head"><div><h1>LifeLog</h1><p>&#20170;&#26085;&#12418;&#19968;&#27497;&#12289;&#12424;&#12367;&#12420;&#12387;&#12383;&#12290;</p></div></div>
  <section class="goalBox"><div class="goalTitle">&#9873; &#20170;&#12398;&#30446;&#27161;</div><div id="goals"></div><button class="goalAdd" onclick="addGoal()">&#65291; &#30446;&#27161;&#12434;&#36861;&#21152;</button><button class="completedToggle" onclick="openCompletedPage()">&#36948;&#25104;&#12375;&#12383;&#30446;&#27161;&#12434;&#35211;&#12427;</button></section>
+
+<section class="dailyBox">
+  <div class="dailyTitle">&#10003; &#27598;&#26085;&#12398;&#30446;&#27161;</div>
+  <div id="dailyGoals"></div>
+  <button class="dailyAdd" onclick="addDailyGoal()">&#65291; &#27598;&#26085;&#12398;&#30446;&#27161;&#12434;&#36861;&#21152;</button>
+  <div class="dailyLegend">&#12459;&#12524;&#12531;&#12480;&#12540;&#12398; &#10003; &#65309; &#20840;&#37096;&#36948;&#25104; / &#215; &#65309; &#26410;&#36948;&#25104;</div>
+</section>
+
  <div class="calHead"><div class="month" id="monthTitle">9&#26376;</div><div class="calBtns"><button class="calBtn" onclick="move(-1)">&#8249;</button><button class="calBtn" onclick="goToday()">&#9679;</button><button class="calBtn" onclick="move(1)">&#8250;</button></div></div>
  <div class="week"><div>&#26085;</div><div>&#26376;</div><div>&#28779;</div><div>&#27700;</div><div>&#26408;</div><div>&#37329;</div><div>&#22303;</div></div>
  <div class="grid" id="calendar">
@@ -61,13 +86,15 @@
 </div>
 
 <div class="modal" id="choice" onclick="backdrop(event,'choice')"><div class="sheet"><h2 id="choiceDate">&#26085;&#20184;</h2><div class="sub">&#12371;&#12398;&#26085;&#12399;&#12393;&#12358;&#12377;&#12427;&#65311;</div><div class="choice"><button onclick="openEdit()">&#32232;&#38598;</button><button onclick="openPlan()">&#20104;&#23450;&#35352;&#20837;</button></div><button class="btn light" onclick="closeM('choice')">&#38281;&#12376;&#12427;</button></div></div>
-<div class="modal" id="edit" onclick="backdrop(event,'edit')"><div class="sheet"><h2 id="editDate">&#20170;&#26085;&#12398;&#35352;&#37682;</h2><div class="two"><div class="field"><label>&#21220;&#21209;</label><select id="shift"><option value="">&#36984;&#25246;</option><option>&#26172;&#21220;</option><option>&#22812;&#21220;</option><option>&#20241;&#12415;</option></select></div><div class="field"><label>&#36864;&#31038;&#26178;&#38291;</label><input type="time" id="clock"></div></div><div class="field"><label>&#26085;&#35352; / &#20170;&#26085;&#12354;&#12387;&#12383;&#12371;&#12392;</label><textarea id="diary" placeholder="&#20170;&#26085;&#12354;&#12387;&#12383;&#12371;&#12392;&#12434;&#33258;&#30001;&#12395;&#26360;&#12367;"></textarea></div><div class="field"><label>&#20351;&#12387;&#12383;&#12362;&#37329;</label><div class="expenseRow"><input id="amount" type="number" inputmode="numeric" placeholder="&#37329;&#38989;"><input id="expenseNote" placeholder="&#20309;&#12395;&#20351;&#12387;&#12383;&#65311;"><button class="btn light" style="margin:0;padding:12px" onclick="addExpense()">&#36861;&#21152;</button></div><div class="expenseList" id="expenseList"></div></div><div class="mini" id="spentTotal">&#12371;&#12398;&#26085;&#12398;&#25903;&#20986; &#165;0</div><button class="btn primary" onclick="saveEdit()">&#20445;&#23384;</button><button class="btn light" onclick="closeM('edit')">&#38281;&#12376;&#12427;</button></div></div>
+<div class="modal" id="edit" onclick="backdrop(event,'edit')"><div class="sheet"><h2 id="editDate">&#20170;&#26085;&#12398;&#35352;&#37682;</h2><div class="two"><div class="field"><label>&#21220;&#21209;</label><select id="shift"><option value="">&#36984;&#25246;</option><option>&#26172;&#21220;</option><option>&#22812;&#21220;</option><option>&#20241;&#12415;</option></select></div><div class="field"><label>&#26089;&#30058;</label><select id="early"><option value="">&#36984;&#25246;</option><option value="yes">&#12354;&#12426;</option><option value="no">&#12394;&#12375;</option></select></div></div><div class="field"><label>&#36864;&#31038;&#26178;&#38291;</label><input type="time" id="clock"></div><div class="field"><label>&#27598;&#26085;&#12398;&#30446;&#27161;</label><div id="dailyGoalsForDate"></div></div><div class="field"><label>&#26085;&#35352; / &#20170;&#26085;&#12354;&#12387;&#12383;&#12371;&#12392;</label><textarea id="diary" placeholder="&#20170;&#26085;&#12354;&#12387;&#12383;&#12371;&#12392;&#12434;&#33258;&#30001;&#12395;&#26360;&#12367;"></textarea></div><div class="field"><label>&#20351;&#12387;&#12383;&#12362;&#37329;</label><div class="expenseRow"><input id="amount" type="number" inputmode="numeric" placeholder="&#37329;&#38989;"><input id="expenseNote" placeholder="&#20309;&#12395;&#20351;&#12387;&#12383;&#65311;"><button class="btn light" style="margin:0;padding:12px" onclick="addExpense()">&#36861;&#21152;</button></div><div class="expenseList" id="expenseList"></div></div><div class="mini" id="spentTotal">&#12371;&#12398;&#26085;&#12398;&#25903;&#20986; &#165;0</div><button class="btn primary" onclick="saveEdit()">&#20445;&#23384;</button><button class="btn light" onclick="closeM('edit')">&#38281;&#12376;&#12427;</button></div></div>
 <div class="modal" id="plan" onclick="backdrop(event,'plan')"><div class="sheet"><h2 id="planDate">&#20104;&#23450;&#35352;&#20837;</h2><div class="field"><label>&#20309;&#26178;&#65311;</label><input type="time" id="planTime"></div><div class="field"><label>&#20104;&#23450;</label><input id="planText" placeholder="&#20363;&#65306;&#27503;&#21307;&#32773;&#12289;&#21451;&#36948;&#12392;&#12372;&#39151;"></div><button class="btn primary" onclick="savePlan()">&#20104;&#23450;&#12434;&#20445;&#23384;</button><button class="btn light" onclick="closeM('plan')">&#38281;&#12376;&#12427;</button></div></div>
 <script>
 const now=new Date();
 const TODAY=now.getFullYear()+'-'+String(now.getMonth()+1).padStart(2,'0')+'-'+String(now.getDate()).padStart(2,'0');
 let selected=TODAY; let shown=new Date(now.getFullYear(),now.getMonth(),1);
 let db={};try{db=JSON.parse(localStorage.getItem('lifelog-simple')||'{}')||{}}catch(e){db={}}
+let dailyGoals=[];try{dailyGoals=JSON.parse(localStorage.getItem('lifelog-daily-goals')||'[]')||[]}catch(e){dailyGoals=[]}
+let dailyChecks={};try{dailyChecks=JSON.parse(localStorage.getItem('lifelog-daily-checks')||'{}')||{}}catch(e){dailyChecks={}}
 let salaries={};try{salaries=JSON.parse(localStorage.getItem('lifelog-salaries')||'{}')||{}}catch(e){salaries={}}
 let completedGoals=[];try{completedGoals=JSON.parse(localStorage.getItem('lifelog-completed-goals')||'[]')||[]}catch(e){completedGoals=[]}
 let goals=[];try{goals=JSON.parse(localStorage.getItem('lifelog-goals')||'null')||['\u4eca\u67083\u4e07\u5186\u8caf\u91d1\u3059\u308b','\u90313\u56de\u7b4b\u30c8\u30ec','\u8cc7\u683c\u306e\u52c9\u5f37\u3092\u3059\u308b']}catch(e){goals=['\u4eca\u67083\u4e07\u5186\u8caf\u91d1\u3059\u308b','\u90313\u56de\u7b4b\u30c8\u30ec','\u8cc7\u683c\u306e\u52c9\u5f37\u3092\u3059\u308b']}
@@ -75,22 +102,34 @@ if(!localStorage.getItem('lifelog-v4-migrated')){
   goals=['\u4eca\u67083\u4e07\u5186\u8caf\u91d1\u3059\u308b','\u90313\u56de\u7b4b\u30c8\u30ec','\u8cc7\u683c\u306e\u52c9\u5f37\u3092\u3059\u308b'];
   try{localStorage.setItem('lifelog-goals',JSON.stringify(goals));localStorage.setItem('lifelog-v4-migrated','1')}catch(e){}
 }
-function store(){try{localStorage.setItem('lifelog-simple',JSON.stringify(db));localStorage.setItem('lifelog-goals',JSON.stringify(goals));localStorage.setItem('lifelog-salaries',JSON.stringify(salaries));localStorage.setItem('lifelog-completed-goals',JSON.stringify(completedGoals))}catch(e){}}
+function store(){try{localStorage.setItem('lifelog-simple',JSON.stringify(db));localStorage.setItem('lifelog-goals',JSON.stringify(goals));localStorage.setItem('lifelog-salaries',JSON.stringify(salaries));localStorage.setItem('lifelog-completed-goals',JSON.stringify(completedGoals));localStorage.setItem('lifelog-daily-goals',JSON.stringify(dailyGoals));localStorage.setItem('lifelog-daily-checks',JSON.stringify(dailyChecks))}catch(e){}}
 function fmt(ds){let [y,m,d]=ds.split('-');return `${y}\u5e74${Number(m)}\u6708${Number(d)}\u65e5`}
 function show(id){document.getElementById(id).classList.add('show')}function closeM(id){document.getElementById(id).classList.remove('show')}function backdrop(e,id){if(e.target.id===id)closeM(id)}
 function dateTap(el){selected=el.dataset.date;if(selected===TODAY)openEdit();else{document.getElementById('choiceDate').textContent=fmt(selected);show('choice')}}
-function openEdit(){closeM('choice');let x=db[selected]||{};if(!x.expenses)x.expenses=x.spent?[{amount:Number(x.spent),note:'\u4ee5\u524d\u306e\u652f\u51fa'}]:[];db[selected]=x;document.getElementById('editDate').textContent=fmt(selected)+' \u306e\u8a18\u9332';document.getElementById('shift').value=x.shift||'';document.getElementById('clock').value=x.clock||'';document.getElementById('diary').value=x.diary||'';document.getElementById('amount').value='';document.getElementById('expenseNote').value='';renderExpenses();show('edit')}
+function openEdit(){closeM('choice');let x=db[selected]||{};if(!x.expenses)x.expenses=x.spent?[{amount:Number(x.spent),note:'\u4ee5\u524d\u306e\u652f\u51fa'}]:[];db[selected]=x;document.getElementById('editDate').textContent=fmt(selected)+' \u306e\u8a18\u9332';document.getElementById('shift').value=x.shift||'';document.getElementById('early').value=x.early||'';document.getElementById('clock').value=x.clock||'';document.getElementById('diary').value=x.diary||'';document.getElementById('amount').value='';document.getElementById('expenseNote').value='';renderExpenses();renderDailyGoalsForSelectedDate();show('edit')}
 function addExpense(){let a=Number(document.getElementById('amount').value||0),n=document.getElementById('expenseNote').value.trim();if(a<=0)return;let x=db[selected]||{};x.expenses=x.expenses||[];x.expenses.push({amount:a,note:n});x.spent=x.expenses.reduce((t,e)=>t+Number(e.amount||0),0);db[selected]=x;document.getElementById('amount').value='';document.getElementById('expenseNote').value='';store();renderExpenses()}
 function removeExpense(i){let x=db[selected]||{};x.expenses=x.expenses||[];x.expenses.splice(i,1);x.spent=x.expenses.reduce((t,e)=>t+Number(e.amount||0),0);db[selected]=x;store();renderExpenses()}
 function renderExpenses(){let x=db[selected]||{},es=x.expenses||[];document.getElementById('expenseList').innerHTML=es.map((e,i)=>'<div class="expenseItem"><span>'+(e.note||'\u652f\u51fa')+'</span><b>\u00a5'+Number(e.amount||0).toLocaleString()+'</b><button onclick="removeExpense('+i+')">\u524a\u9664</button></div>').join('');document.getElementById('spentTotal').textContent='\u3053\u306e\u65e5\u306e\u652f\u51fa \u00a5'+es.reduce((t,e)=>t+Number(e.amount||0),0).toLocaleString()}
-function saveEdit(){let x=db[selected]||{};x.shift=document.getElementById('shift').value;x.clock=document.getElementById('clock').value;x.diary=document.getElementById('diary').value;db[selected]=x;store();render();closeM('edit')}
+function saveEdit(){let x=db[selected]||{};x.shift=document.getElementById('shift').value;x.early=document.getElementById('early').value;x.clock=document.getElementById('clock').value;x.diary=document.getElementById('diary').value;db[selected]=x;store();render();closeM('edit')}
 function openPlan(){closeM('choice');let x=db[selected]||{};document.getElementById('planDate').textContent=fmt(selected)+' \u306e\u4e88\u5b9a';document.getElementById('planTime').value=x.planTime||'';document.getElementById('planText').value=x.planText||'';show('plan')}
 function savePlan(){let x=db[selected]||{};x.planTime=document.getElementById('planTime').value;x.planText=document.getElementById('planText').value;db[selected]=x;store();render();closeM('plan')}
-function render(){let y=shown.getFullYear(),m=shown.getMonth();document.getElementById('monthTitle').textContent=(m+1)+'\u6708';let first=new Date(y,m,1),start=new Date(y,m,1-first.getDay()),html='';for(let i=0;i<42;i++){let d=new Date(start);d.setDate(start.getDate()+i);let ds=d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');let cls='day '+(d.getDay()==0?'sun ':'')+(d.getDay()==6?'sat ':'')+(d.getMonth()!=m?'muted ':'');let n=ds===TODAY?'<span class="todayNum">'+d.getDate()+'</span>':d.getDate();let dot=db[ds]&&((db[ds].diary)||(db[ds].planText)||(db[ds].spent))?'<span class="dot"></span>':'';html+='<button class="'+cls+'" data-date="'+ds+'" onclick="dateTap(this)">'+n+dot+'</button>'}document.getElementById('calendar').innerHTML=html;renderMonthlySummary()}
+function render(){let y=shown.getFullYear(),m=shown.getMonth();document.getElementById('monthTitle').textContent=(m+1)+'\u6708';let first=new Date(y,m,1),start=new Date(y,m,1-first.getDay()),html='';for(let i=0;i<42;i++){let d=new Date(start);d.setDate(start.getDate()+i);let ds=d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');let cls='day '+(d.getDay()==0?'sun ':'')+(d.getDay()==6?'sat ':'')+(d.getMonth()!=m?'muted ':'');let n=ds===TODAY?'<span class="todayNum">'+d.getDate()+'</span>':d.getDate();let dot=db[ds]&&((db[ds].diary)||(db[ds].planText)||(db[ds].spent))?'<span class="dot"></span>':'';let dailyMark=dailyStatusForDate(ds);html+='<button class="'+cls+'" data-date="'+ds+'" onclick="dateTap(this)">'+n+dot+dailyMark+'</button>'}document.getElementById('calendar').innerHTML=html;renderMonthlySummary()}
 function monthKey(){return shown.getFullYear()+'-'+String(shown.getMonth()+1).padStart(2,'0')}
 function renderMonthlySummary(){let key=monthKey(),total=0;Object.entries(db).forEach(([ds,x])=>{if(ds.startsWith(key+'-')){if(Array.isArray(x.expenses))total+=x.expenses.reduce((t,e)=>t+Number(e.amount||0),0);else total+=Number(x.spent||0)}});document.getElementById('monthlySpent').textContent='\u00a5'+total.toLocaleString();let sal=Number(salaries[key]||0);document.getElementById('salaryInput').value=sal||'';document.getElementById('salarySaved').textContent=sal?'\u4fdd\u5b58\u6e08\u307f: \u00a5'+sal.toLocaleString():''}
 function saveSalary(){let key=monthKey(),v=Number(document.getElementById('salaryInput').value||0);if(v>0)salaries[key]=v;else delete salaries[key];store();renderMonthlySummary()}
 function move(n){shown=new Date(shown.getFullYear(),shown.getMonth()+n,1);render()}function goToday(){shown=new Date(now.getFullYear(),now.getMonth(),1);render()}
+
+function dailyGoalsForDate(ds){return dailyGoals.filter(g=>g.created<=ds&&(!g.deleted||g.deleted>ds))}
+function getDailyChecks(ds){if(!dailyChecks[ds])dailyChecks[ds]={};return dailyChecks[ds]}
+function dailyDone(ds,id){return !!(dailyChecks[ds]&&dailyChecks[ds][id])}
+function setDailyCheck(ds,id,v){let c=getDailyChecks(ds);c[id]=!!v;store();if(ds===TODAY)renderDailyGoalsHome();if(document.getElementById('edit').classList.contains('show')&&selected===ds)renderDailyGoalsForSelectedDate();render()}
+function renderDailyGoalsHome(){let el=document.getElementById('dailyGoals'),list=dailyGoals.filter(g=>!g.deleted);if(!list.length){el.innerHTML='<div class="mini">\u6bce\u65e5\u306e\u76ee\u6a19\u3092\u8ffd\u52a0\u3057\u3066\u307f\u3088\u3046</div>';return}el.innerHTML=list.map(g=>{let checked=dailyDone(TODAY,g.id);return '<div class="dailyGoal"><button class="dailyCheck" onclick="setDailyCheck(TODAY,\''+g.id+'\','+(!checked)+')">'+(checked?'\u2713':'')+'</button><input value="'+String(g.text).replace(/"/g,'&quot;')+'" onchange="changeDailyGoal(\''+g.id+'\',this.value)"><button class="dailyDelete" onclick="deleteDailyGoal(\''+g.id+'\')">\u00d7</button></div>'}).join('')}
+function addDailyGoal(){let id='dg'+Date.now()+Math.random().toString(16).slice(2);dailyGoals.push({id:id,text:'\u65b0\u3057\u3044\u6bce\u65e5\u306e\u76ee\u6a19',created:TODAY,deleted:null});store();renderDailyGoalsHome();render()}
+function changeDailyGoal(id,v){let g=dailyGoals.find(x=>x.id===id);if(g){g.text=v;store();renderDailyGoalsForSelectedDate()}}
+function deleteDailyGoal(id){let g=dailyGoals.find(x=>x.id===id);if(g){g.deleted=TODAY;store();renderDailyGoalsHome();render()}}
+function renderDailyGoalsForSelectedDate(){let el=document.getElementById('dailyGoalsForDate');if(!el)return;let list=dailyGoalsForDate(selected);if(!list.length){el.innerHTML='<div class="mini">\u3053\u306e\u65e5\u306e\u6bce\u65e5\u76ee\u6a19\u306f\u3042\u308a\u307e\u305b\u3093</div>';return}el.innerHTML=list.map(g=>'<label class="dailyHistoryCheck"><input type="checkbox" '+(dailyDone(selected,g.id)?'checked':'')+' onchange="setDailyCheck(selected,\''+g.id+'\',this.checked)"><span>'+g.text+'</span></label>').join('')}
+function dailyStatusForDate(ds){let list=dailyGoalsForDate(ds);if(!list.length)return '';let count=list.filter(g=>dailyDone(ds,g.id)).length;if(count===list.length)return '<span class="dailyStatus ok">\u2713</span>';if(ds<=TODAY)return '<span class="dailyStatus ng">\u00d7</span>';return ''}
+
 function renderGoals(){document.getElementById('goals').innerHTML=goals.map((g,i)=>'<div class="goal"><button class="check" onclick="completeGoal('+i+')"></button><input value="'+String(g).replace(/"/g,'&quot;')+'" onchange="changeGoal('+i+',this.value)"></div>').join('');renderCompletedGoals()}
 function changeGoal(i,v){goals[i]=v;store()}
 function addGoal(){goals.push('\u65b0\u3057\u3044\u76ee\u6a19');store();renderGoals()}
@@ -117,6 +156,6 @@ function deleteCompletedGoal(i){
   renderCompletedGoalsPage();
 }
 function editGoals(){addGoal()}
-renderGoals();render();
+renderGoals();renderDailyGoalsHome();render();
 </script>
 </body></html>
