@@ -1,4 +1,5 @@
 <!doctype html>
+<!-- LifeLog clean build v4 ASCII-safe -->
 <html lang="ja">
 <head>
 <meta charset="utf-8">
@@ -31,6 +32,10 @@ const TODAY=now.getFullYear()+'-'+String(now.getMonth()+1).padStart(2,'0')+'-'+S
 let selected=TODAY; let shown=new Date(now.getFullYear(),now.getMonth(),1);
 let db={};try{db=JSON.parse(localStorage.getItem('lifelog-simple')||'{}')||{}}catch(e){db={}}
 let goals=[];try{goals=JSON.parse(localStorage.getItem('lifelog-goals')||'null')||['\u4eca\u67083\u4e07\u5186\u8caf\u91d1\u3059\u308b','\u90313\u56de\u7b4b\u30c8\u30ec','\u8cc7\u683c\u306e\u52c9\u5f37\u3092\u3059\u308b']}catch(e){goals=['\u4eca\u67083\u4e07\u5186\u8caf\u91d1\u3059\u308b','\u90313\u56de\u7b4b\u30c8\u30ec','\u8cc7\u683c\u306e\u52c9\u5f37\u3092\u3059\u308b']}
+if(!localStorage.getItem('lifelog-v4-migrated')){
+  goals=['\u4eca\u67083\u4e07\u5186\u8caf\u91d1\u3059\u308b','\u90313\u56de\u7b4b\u30c8\u30ec','\u8cc7\u683c\u306e\u52c9\u5f37\u3092\u3059\u308b'];
+  try{localStorage.setItem('lifelog-goals',JSON.stringify(goals));localStorage.setItem('lifelog-v4-migrated','1')}catch(e){}
+}
 function store(){try{localStorage.setItem('lifelog-simple',JSON.stringify(db));localStorage.setItem('lifelog-goals',JSON.stringify(goals))}catch(e){}}
 function fmt(ds){let [y,m,d]=ds.split('-');return `${y}\u5e74${Number(m)}\u6708${Number(d)}\u65e5`}
 function show(id){document.getElementById(id).classList.add('show')}function closeM(id){document.getElementById(id).classList.remove('show')}function backdrop(e,id){if(e.target.id===id)closeM(id)}
